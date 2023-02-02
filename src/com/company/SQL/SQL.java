@@ -1,5 +1,6 @@
-package com.company;
+package com.company.SQL;
 
+import com.company.Memberships.Membership;
 import com.company.Memberships.Users;
 import org.hsqldb.rights.User;
 
@@ -33,35 +34,26 @@ public class SQL {
 
     }
 
-    public static ArrayList<Users> print(String sql) {
-boolean register = true;
+    public static ArrayList<Users> Search(String sql) {
+        boolean register = true;
         ArrayList<Users> output = new ArrayList<>();
         String DatabaseLocation = System.getProperty("user.dir") + "\\ProjectDatabase.accdb";
         try {
-            System.out.println(sql);
             Connection con = DriverManager.getConnection("jdbc:ucanaccess://" + DatabaseLocation, "", "");
             Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            if(register){
-                ResultSet Rs = stmt.executeQuery("SELECT * FROM USERS");
-                Rs.last();
-                Users newUser = new Users(Rs.getInt(1), Rs.getString(2), Rs.getString(3),
-                        Rs.getString(4), Rs.getString(5), Rs.getString(6), Rs.getInt(7), Rs.getString(8));
-
-            }
             ResultSet Rs = stmt.executeQuery(sql);
             ResultSetMetaData rsmd = Rs.getMetaData();
             int columnsNumber = rsmd.getColumnCount();
             Rs.last();
             int rows = Rs.getRow();
             Rs.beforeFirst();
-            while (Rs.next()){
-            for (int i = 0; i < rows; i++) {
-                Users newUser = new Users(Rs.getInt(1), Rs.getString(2), Rs.getString(3),
-                        Rs.getString(4), Rs.getString(5), Rs.getString(6), Rs.getInt(7), Rs.getString(8));
-
-                output.add(newUser);
-                Rs.next();
-            }
+            while (Rs.next()) {
+                for (int i = 0; i < rows; i++) {
+                    Users newUser = new Users(Rs.getInt(1), Rs.getString(2), Rs.getString(3),
+                            Rs.getString(4), Rs.getString(5), Rs.getString(6), Rs.getInt(7), Rs.getString(8));
+                    output.add(newUser);
+                    Rs.next();
+                }
             }
             con.close();
 
@@ -70,20 +62,26 @@ boolean register = true;
         }
         return output;
     }
-    public static void add(String First, String Last, String EmailAd, String PhoneNum, String Postc, String HouseName, String StreetAd){
-        String DatabaseLocation = System.getProperty("user.dir") + "\\ProjectDatabase.accdb";
-        try{
-            Connection con = DriverManager.getConnection("jdbc:ucanaccess://" + DatabaseLocation, "", "");
-            Statement stmt = con.createStatement();
-            stmt.execute("INSERT INTO Users(FirstName, LastName, Email, Phone, Postcode, HouseNumber, Street) VALUES(' " + First + "', '" + Last +
-                            "', '" + EmailAd + "', '" + PhoneNum + "', '" +  Postc + "', '" + HouseName + "', '" + StreetAd + "')");
-            con.close();
-        }catch(Exception e){
 
+
+    public static Membership MembershipFind() {
+        boolean register = true;
+        ArrayList<Users> output = new ArrayList<>();
+        String DatabaseLocation = System.getProperty("user.dir") + "\\ProjectDatabase.accdb";
+        try {
+            Connection con = DriverManager.getConnection("jdbc:ucanaccess://" + DatabaseLocation, "", "");
+            Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet Rs = stmt.executeQuery("SELECT * FROM Memberships");
+            ResultSetMetaData rsmd = Rs.getMetaData();
+            Rs.last();
+            Membership currentMembership = new Membership(Rs.getInt(1), Rs.getBoolean(2), Rs.getBoolean(3), Rs.getBoolean(4), Rs.getBoolean(5));
+            Rs.next();
+            con.close();
+            return currentMembership;
+        } catch (Exception e) {
             System.out.println(e);
         }
+        return null;
+
     }
-
-
-
 }

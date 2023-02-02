@@ -1,6 +1,8 @@
 package com.company.Memberships;
 
-import com.company.SQL;
+import com.company.SQL.Additions;
+import com.company.SQL.SQL;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -11,20 +13,20 @@ public class Management {
             System.out.print("Please enter search criteria:       ");
             Scanner input = new Scanner(System.in);
             String criteria = input.nextLine();
-            ArrayList<Users> choices = SQL.print("SELECT * FROM Users WHERE FirstName = '" + criteria + "' OR LastName = '" + criteria + "' OR Email = '"
+            ArrayList<Users> choices = SQL.Search("SELECT * FROM Users WHERE FirstName = '" + criteria + "' OR LastName = '" + criteria + "' OR Email = '"
                     + criteria + "' OR Phone = '" + criteria + "' OR Postcode = '" + criteria + "' OR HouseNumber = '"
                     + criteria + "' OR Street = '" + criteria + "'");
-            if(choices.size() != 0){
-                if(choices.size()>1){
+            if (choices.size() != 0) {
+                if (choices.size() > 1) {
                     for (int i = 0; i < choices.size(); i++) {
-                        System.out.println((i +1) + " :  " + choices.get(i).getPhone());
+                        System.out.println((i + 1) + " :  " + choices.get(i).getPhone());
                     }
                     System.out.println("Please select which user is desired.");
-                    System.out.println(choices.get((input.nextInt()-1)).toString());
-                }else{
+                    System.out.println(choices.get((input.nextInt() - 1)).toString());
+                } else {
                     System.out.println(choices.get(0).toString());
                 }
-            }else{
+            } else {
                 System.out.println("Please try again entering one of the following pieces of information. Firstname, Lastname, Email, Phone, postcode, HouseNumber, Street");
             }
 
@@ -33,26 +35,30 @@ public class Management {
             System.out.println(e);
         }
 
-    }public static void Register(){
+    }
+
+    public static void Register() {
         Scanner input = new Scanner(System.in);
 
         HashMap<String, String> registerValues = new HashMap<String, String>();
         System.out.print("Please enter the Firstname: ");
-        registerValues.put("FirstName", input.next());
+        registerValues.put("FirstName", input.nextLine());
         System.out.print("Please enter the LastName: ");
-        registerValues.put("LastName", input.next());
+        registerValues.put("LastName", input.nextLine());
         System.out.print("Please enter the Email: ");
-        registerValues.put("Email", input.next());
+        registerValues.put("Email", input.nextLine());
         System.out.print("Please enter the Phone: ");
-        registerValues.put("Phone", input.next());
+        registerValues.put("Phone", input.nextLine());
         System.out.print("Please enter the Postcode: ");
-        registerValues.put("Postcode", input.next());
+        registerValues.put("Postcode", input.nextLine());
         System.out.print("Please enter the HouseNumber: ");
-        registerValues.put("HouseNumber", input.next());
+        registerValues.put("HouseNumber", input.nextLine());
         System.out.print("Please enter the Street: ");
-        registerValues.put("Street", input.next());
-        SQL.add(registerValues.get("FirstName"), registerValues.get("LastName"), registerValues.get("Email"), registerValues.get("Phone"), registerValues.get("Postcode"),
+        registerValues.put("Street", input.nextLine());
+        Additions.add(registerValues.get("FirstName"), registerValues.get("LastName"), registerValues.get("Email"), registerValues.get("Phone"), registerValues.get("Postcode"),
                 registerValues.get("HouseNumber"), registerValues.get("Street"));
 
+        Additions.addAccount(true, registerValues.get("FirstName"), registerValues.get("LastName"), registerValues.get("Phone"));
+        System.out.println("Successfully added new member.\n");
     }
 }
