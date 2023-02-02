@@ -14,13 +14,21 @@ public class Management {
             ArrayList<Users> choices = SQL.print("SELECT * FROM Users WHERE FirstName = '" + criteria + "' OR LastName = '" + criteria + "' OR Email = '"
                     + criteria + "' OR Phone = '" + criteria + "' OR Postcode = '" + criteria + "' OR HouseNumber = '"
                     + criteria + "' OR Street = '" + criteria + "'");
-            if(choices.size()>1){
-                for (int i = 0; i < choices.size(); i++) {
-                    System.out.println((i +1) + " :  " + choices.get(i).getPhone());
+            if(choices.size() != 0){
+                if(choices.size()>1){
+                    for (int i = 0; i < choices.size(); i++) {
+                        System.out.println((i +1) + " :  " + choices.get(i).getPhone());
+                    }
+                    System.out.println("Please select which user is desired.");
+                    System.out.println(choices.get((input.nextInt()-1)).toString());
+                }else{
+                    System.out.println(choices.get(0).toString());
                 }
-                System.out.println("Please select which user is desired.");
+            }else{
+                System.out.println("Please try again entering one of the following pieces of information. Firstname, Lastname, Email, Phone, postcode, HouseNumber, Street");
             }
-            System.out.println(choices.get((input.nextInt()-1)).toString());
+
+
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -43,7 +51,8 @@ public class Management {
         registerValues.put("HouseNumber", input.next());
         System.out.print("Please enter the Street: ");
         registerValues.put("Street", input.next());
-        SQL.add();
+        SQL.add(registerValues.get("FirstName"), registerValues.get("LastName"), registerValues.get("Email"), registerValues.get("Phone"), registerValues.get("Postcode"),
+                registerValues.get("HouseNumber"), registerValues.get("Street"));
 
     }
 }
