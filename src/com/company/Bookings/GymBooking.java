@@ -1,7 +1,10 @@
 package com.company.Bookings;
 
+import com.company.SQL.BookingSQL;
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -32,6 +35,9 @@ public class GymBooking {
         }
 
     }System.out.println(Selected);
-
+        ArrayList<Booking> currentBookings = BookingSQL.Bookings("SELECT * FROM GYM WHERE BookingDate = '" + Selected + "'");
+        for (int i = 0; i < currentBookings.size(); i++) {
+            System.out.println(currentBookings.get(i).toString());
+        }
 }
         }

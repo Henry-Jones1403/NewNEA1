@@ -19,13 +19,13 @@ public class SQL {
             ResultSet RS = stmt.executeQuery(sql);
             while (RS.next()) {
                 if (Username.equals(RS.getString("Username"))) {
-                    if (RS.getString("Password").equals("password")) {
+
                         if(RS.getString("Password").equals(Password)){
                             con.close();
                             return true;
                         }
 
-                    }
+
                 }
             }
             con.close();
