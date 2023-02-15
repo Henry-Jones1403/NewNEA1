@@ -7,7 +7,7 @@ import org.hsqldb.rights.User;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class SQL {
+public class SQLSearches {
 
     public static boolean LoginSQL(String Username, String Password) {
         String DatabaseLocation = System.getProperty("user.dir") + "\\ProjectDatabase.accdb";
@@ -63,28 +63,32 @@ public class SQL {
         } catch (Exception e) {
             System.out.println(e);
         }
+
         return output;
     }
 
 
-    public static Membership MembershipFind() {
+    public static int MembershipFind(String Gym, String swim, String court, String premium) {
         boolean register = true;
         ArrayList<Users> output = new ArrayList<>();
         String DatabaseLocation = System.getProperty("user.dir") + "\\ProjectDatabase.accdb";
         try {
             Connection con = DriverManager.getConnection("jdbc:ucanaccess://" + DatabaseLocation, "", "");
             Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            ResultSet Rs = stmt.executeQuery("SELECT * FROM Memberships");
+            ResultSet Rs = stmt.executeQuery("SELECT * FROM Memberships WHERE (Gym = '" + Gym.toString() + "') AND (Swim = '" + swim.toString() +
+                    "') AND (Court = '" + court.toString() + "') AND (Premium = '" + premium.toString() + "')");
             ResultSetMetaData rsmd = Rs.getMetaData();
-            Rs.last();
-            Membership currentMembership = new Membership(Rs.getInt(1), Rs.getBoolean(2), Rs.getBoolean(3), Rs.getBoolean(4), Rs.getBoolean(5));
-            Rs.next();
-            con.close();
-            return currentMembership;
+            while (Rs.next()){
+                int MembID = Rs.getInt(1);
+                Rs.next();
+                con.close();
+                return MembID;
+            }
+
         } catch (Exception e) {
             System.out.println(e);
         }
-        return null;
+        return 16;
 
     }
 }
