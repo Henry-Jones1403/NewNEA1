@@ -1,7 +1,9 @@
 package com.company.Memberships;
 
+import com.company.SQL.Additions;
 import com.company.SQL.SQLSearches;
 
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -17,9 +19,11 @@ public class Management {
                 }
                 Scanner input = new Scanner(System.in);
                 String criteria = input.nextLine();
-                ArrayList<Users> choices = SQLSearches.Search("SELECT * FROM Users WHERE FirstName = '" + criteria + "' OR LastName = '" + criteria + "' OR Email = '"
+                ArrayList<Users> choices = SQLSearches.Search("SELECT * " +
+                        "FROM Users " +
+                        "WHERE FirstName = '" + criteria + "' OR LastName = '" + criteria + "' OR Email = '"
                         + criteria + "' OR Phone = '" + criteria + "' OR Postcode = '" + criteria + "' OR HouseNumber = '"
-                        + criteria + "' OR Street = '" + criteria + "'");
+                        + criteria + "' OR Street = '" + criteria + "' ");
                 if (choices.size() != 0) {
                     if (choices.size() > 1) {
                         for (int i = 0; i < choices.size(); i++) {
@@ -27,10 +31,15 @@ public class Management {
                         }
                         System.out.println("Please select which user is desired.");
                         Users SelectedUser = choices.get((input.nextInt() - 1));
-                        System.out.println(SelectedUser.toString());
+                        if(imbedded){
+                            System.out.println(SelectedUser.toString());
+                        }
+
                         return SelectedUser;
                     } else {
-                        System.out.println(choices.get(0).toString());
+                        if(imbedded) {
+                            System.out.println(choices.get(0).toString());
+                        }
                         return choices.get(0);
                     }
                 } else {

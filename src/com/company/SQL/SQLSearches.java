@@ -2,6 +2,7 @@ package com.company.SQL;
 
 import com.company.Memberships.Membership;
 import com.company.Memberships.Users;
+import com.company.PasswordManagement;
 import org.hsqldb.rights.User;
 
 import java.sql.*;
@@ -17,16 +18,25 @@ public class SQLSearches {
             Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             String sql = "SELECT * FROM Accounts";
             ResultSet RS = stmt.executeQuery(sql);
+            boolean username = false;
+            boolean password = false;
             while (RS.next()) {
                 if (Username.equals(RS.getString("Username"))) {
-
-                        if(RS.getString("Password").equals(Password)){
+                    username = true;
+                    if (RS.getString("Password").equals(PasswordManagement.PasswordHasher(Password))) {
+                        password = true;
+                        if (RS.getBoolean(4)) {
                             con.close();
                             return true;
+                        } else if (!RS.getBoolean(4)) {
+                            System.out.println("Sorry you do not have permission to use this system!");
                         }
-
-
+                    }
                 }
+            }if(!username){
+                System.out.println("Incorrect username");
+            }else if(!password){
+                System.out.println("password incorrect");
             }
             con.close();
         } catch (Exception e) {
@@ -68,27 +78,4 @@ public class SQLSearches {
     }
 
 
-    public static int MembershipFind(String Gym, String swim, String court, String premium) {
-        boolean register = true;
-        ArrayList<Users> output = new ArrayList<>();
-        String DatabaseLocation = System.getProperty("user.dir") + "\\ProjectDatabase.accdb";
-        try {
-            Connection con = DriverManager.getConnection("jdbc:ucanaccess://" + DatabaseLocation, "", "");
-            Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            ResultSet Rs = stmt.executeQuery("SELECT * FROM Memberships WHERE (Gym = '" + Gym.toString() + "') AND (Swim = '" + swim.toString() +
-                    "') AND (Court = '" + court.toString() + "') AND (Premium = '" + premium.toString() + "')");
-            ResultSetMetaData rsmd = Rs.getMetaData();
-            while (Rs.next()){
-                int MembID = Rs.getInt(1);
-                Rs.next();
-                con.close();
-                return MembID;
-            }
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return 16;
-
-    }
 }

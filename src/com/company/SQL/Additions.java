@@ -1,7 +1,9 @@
 package com.company.SQL;
 
+import com.company.Memberships.Accounts;
 import com.company.Memberships.Membership;
 import com.company.Memberships.Users;
+import com.company.PasswordManagement;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,12 +19,11 @@ public class Additions {
             stmt.execute(sqlst);
             con.close();
         } catch (Exception e) {
-
             System.out.println(e);
         }
     }
 
-    public static int addAccount(boolean admin, String FirstName_, String LastName_, String PhoneNumber, Membership member, boolean imbedded) {
+    public static void  addAccount(boolean admin, String FirstName_, String LastName_, String PhoneNumber, Membership member, boolean imbedded) {
         String DatabaseLocation = System.getProperty("user.dir") + "\\ProjectDatabase.accdb";
         ArrayList<Users> repeated_names = new ArrayList<>();
         Integer UserID = 0;
@@ -31,20 +32,23 @@ public class Additions {
             for (int i = 0; i < repeated_names.size(); i++) {
                 if (repeated_names.get(i).getPhone().equals(PhoneNumber)) {
                     UserID = repeated_names.get(i).getUserID();
-                }return UserID;
+
+                }
             }
             if(imbedded){
+
                 String username = FirstName_ + "_" + LastName_ + Integer.toString(repeated_names.size());
                 Connection con = DriverManager.getConnection("jdbc:ucanaccess://" + DatabaseLocation, "", "");
                 Statement stmt = con.createStatement();
-
-                stmt.execute("INSERT INTO Accounts(Username, Password, Admin, UserID, MembershipID ) VALUES('" + username + "', 'password', '" + admin + "', '" + UserID + "', '" + member.getMembershipID() + "')");
+                String password = PasswordManagement.PasswordHasher("password");
+                stmt.execute("INSERT INTO Accounts(Username, Password, Admin, UserID, MembershipID) VALUES('" + username + "', '"
+                        + password + "', '" + admin + "', '" + UserID + "', '" + member.getMembershipID() + "')");
                 con.close();
             }
 
         } catch (Exception e) {
 
             System.out.println(e);
-        }return 0;
+        }
     }
 }

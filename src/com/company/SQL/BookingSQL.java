@@ -24,8 +24,8 @@ public class BookingSQL {
             ResultSetMetaData rsmd = Rs.getMetaData();
             while (Rs.next()) {
                 Date dateformat = Rs.getDate(2);
-                Booking newBooking = new Booking(Rs.getInt(1), Rs.getDate(2).toLocalDate(),
-                        LocalTime.parse(Rs.getString(4)), LocalTime.parse(Rs.getString(5)), Rs.getInt(3));
+                Booking newBooking = new Booking(Rs.getInt("GymBookingID"), Rs.getDate("BookingDate").toLocalDate(),
+                        LocalTime.parse(Rs.getString("EntryTime")), LocalTime.parse(Rs.getString("ExitTime")), Rs.getInt("Account"));
                 CurrentBookings.add(newBooking);
             }
             con.close();
@@ -39,19 +39,38 @@ public class BookingSQL {
     public static Accounts AccountFind(Users BookingUser) {
         ArrayList<Booking> CurrentBookings = new ArrayList<Booking>();
         String DatabaseLocation = System.getProperty("user.dir") + "\\ProjectDatabase.accdb";
-        try{
+        try {
             Connection con = DriverManager.getConnection("jdbc:ucanaccess://" + DatabaseLocation, "", "");
             Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet Rs = stmt.executeQuery("SELECT * FROM Accounts WHERE UserID = '" + BookingUser.getUserID() + "'");
             ResultSetMetaData rsmd = Rs.getMetaData();
-            while(Rs.next()){
+            while (Rs.next()) {
                 Accounts BookingAccount = new Accounts(BookingUser.getUserID(), BookingUser.getFirstName(), BookingUser.getLastName(), BookingUser.getEmail(),
                         BookingUser.getPhone(), BookingUser.getPostcode(), BookingUser.getHouseNumber(),
-                        BookingUser.getStreet(), Rs.getInt(1), Rs.getInt(6));
+                        BookingUser.getStreet(), Rs.getInt(1), Rs.getInt(6), Rs.getString(2));
+                con.close();
                 return BookingAccount;
-            }
-        }catch(Exception e){
+            }con.close();
+        } catch (Exception e) {
             System.out.println(e);
-        }return null;
+        }
+        return null;
     }
+
+    public static void Book(LocalDate date, LocalTime Entry, LocalTime Exit, int account, String table) {
+        String DatabaseLocation = System.getProperty("user.dir") + "\\ProjectDatabase.accdb";
+        try {
+            Connection con = DriverManager.getConnection("jdbc:ucanaccess://" + DatabaseLocation, "", "");
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO " + table + "(BookingDate, EntryTime, ExitTime, Account) Values(?, ?, ?, ?)");
+            stmt.setString(1,date.toString());
+            stmt.setString(2, Entry.toString());
+            stmt.setString(3, Exit.toString());
+            stmt.setInt(4, account);
+
+            stmt.executeUpdate();
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
+}

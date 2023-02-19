@@ -1,8 +1,8 @@
 package com.company;
 
-import com.company.Bookings.GymBooking;
-import com.company.Memberships.Management;
-import com.company.Memberships.Register;
+import com.company.Bookings.BookSlot;
+import com.company.Memberships.*;
+import com.company.SQL.DeleteBooking;
 import com.company.SQL.SQLSearches;
 
 import java.util.Locale;
@@ -11,9 +11,9 @@ import java.util.Scanner;
 public class Login {
     public static boolean Login() {
         Scanner input = new Scanner(System.in);
-        System.out.println("Please enter username: ");
+        System.out.println("----------------\nPlease enter username: ");
         String username = input.next();
-        System.out.println("Please enter password: ");
+        System.out.println("----------------\nPlease enter password: ");
         String password = input.next();
         if (SQLSearches.LoginSQL(username, password)) {
             return true;
@@ -24,19 +24,36 @@ public class Login {
 
     public static void Startup() {
         Scanner input = new Scanner(System.in);
-        System.out.println("Welcome to MyLeisureCentre. Please select which facility you would like to use by typing in one of the following options." +
-                "\n- Search\n- Register\n- Gym");
+        System.out.println("----------------\nWelcome to MyLeisureCentre. Please select which facility you would like to use by typing in one of the following options." +
+                "\n- Search\n- Register\n- Gym\n- Swim\n- Court\n- Bookings\n- Delete\n- Modify\n- All Emails");
         String Option = input.next();
         switch (Option.toUpperCase(Locale.ROOT)) {
             case "SEARCH":
-                Management.search(false);
+                Management.search(true);
                 break;
             case "REGISTER":
                 Register.Register();
                 break;
             case "GYM":
-                GymBooking.BookSlot();
+                BookSlot.BookSlot("Gym");
                 break;
+            case "SWIM":
+                BookSlot.BookSlot("Swim");
+                break;
+            case "COURT":
+                BookSlot.BookSlot("Court");
+                break;
+            case "BOOKINGS":
+                Print.PrintBookings("Gym");
+                break;
+            case "DELETE":
+                DeleteBooking.deleteChoice();
+                break;
+            case "MODIFY":
+                ChangeMembership.ChangeMembership();
+                break;
+            case "ALL EMAILS":
+                SearchEmails.Emailsort();
         }
     }
 

@@ -3,12 +3,14 @@ package com.company.Memberships;
 public class Accounts extends Users{
     private int AccountID;
     private int MembershipId;
+    private String Username;
 
     public Accounts(int userID, String firstName, String lastName, String email, String phone, String postcode, int houseNumber,
-                    String street, int accountID, int MembershipID) {
+                    String street, int accountID, int MembershipID, String username) {
         super(userID, firstName, lastName, email, phone, postcode, houseNumber, street);
         AccountID = accountID;
         MembershipId = MembershipID;
+        Username = username;
 
 
     }
@@ -28,6 +30,14 @@ public class Accounts extends Users{
         MembershipId = membershipId;
     }
 
+    public String getUsername() {
+        return Username;
+    }
+
+    public void setUsername(String username) {
+        Username = username;
+    }
+
     @Override
     public String toString() {
         return "Accounts{" +
@@ -41,6 +51,7 @@ public class Accounts extends Users{
                 ", Postcode='" + Postcode + '\'' +
                 ", HouseNumber=" + HouseNumber +
                 ", Street='" + Street + '\'' +
+                ", Username='" + Username + '\'' +
                 '}';
     }
 }

@@ -93,7 +93,7 @@ public class Users {
                 "\n LastName = " + LastName +
                 "\n Email = " + Email +
                 "\n Phone = " + Phone +
-                "\n Postcode = " + Postcode +
+                "\n Postcode = +44" + Postcode +
                 "\n HouseNumber = " + HouseNumber +
                 "\n Street = " + Street + "\n" ;
     }
