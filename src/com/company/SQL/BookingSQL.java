@@ -47,7 +47,7 @@ public class BookingSQL {
             while (Rs.next()) {
                 Accounts BookingAccount = new Accounts(BookingUser.getUserID(), BookingUser.getFirstName(), BookingUser.getLastName(), BookingUser.getEmail(),
                         BookingUser.getPhone(), BookingUser.getPostcode(), BookingUser.getHouseNumber(),
-                        BookingUser.getStreet(), Rs.getInt(1), Rs.getInt(6), Rs.getString(2));
+                        BookingUser.getStreet(), Rs.getInt(1), Rs.getInt(6), Rs.getString(2), Rs.getBoolean(7));
                 con.close();
                 return BookingAccount;
             }con.close();
@@ -57,15 +57,16 @@ public class BookingSQL {
         return null;
     }
 
-    public static void Book(LocalDate date, LocalTime Entry, LocalTime Exit, int account, String table) {
+    public static void Book(LocalDate date, LocalTime Entry, LocalTime Exit, int account, String table, boolean Requirements) {
         String DatabaseLocation = System.getProperty("user.dir") + "\\ProjectDatabase.accdb";
         try {
             Connection con = DriverManager.getConnection("jdbc:ucanaccess://" + DatabaseLocation, "", "");
-            PreparedStatement stmt = con.prepareStatement("INSERT INTO " + table + "(BookingDate, EntryTime, ExitTime, Account) Values(?, ?, ?, ?)");
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO " + table + "(BookingDate, EntryTime, ExitTime, Account, Requirements) Values(?, ?, ?, ?, ?)");
             stmt.setString(1,date.toString());
             stmt.setString(2, Entry.toString());
             stmt.setString(3, Exit.toString());
             stmt.setInt(4, account);
+            stmt.setBoolean(5, Requirements);
 
             stmt.executeUpdate();
             con.close();

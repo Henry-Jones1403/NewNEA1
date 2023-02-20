@@ -4,13 +4,14 @@ public class Accounts extends Users{
     private int AccountID;
     private int MembershipId;
     private String Username;
-
+private boolean SpecialRequirement;
     public Accounts(int userID, String firstName, String lastName, String email, String phone, String postcode, int houseNumber,
-                    String street, int accountID, int MembershipID, String username) {
+                    String street, int accountID, int MembershipID, String username, boolean specialRequirement) {
         super(userID, firstName, lastName, email, phone, postcode, houseNumber, street);
         AccountID = accountID;
         MembershipId = MembershipID;
         Username = username;
+        SpecialRequirement = specialRequirement;
 
 
     }
@@ -38,6 +39,14 @@ public class Accounts extends Users{
         Username = username;
     }
 
+    public boolean isSpecialRequirement() {
+        return SpecialRequirement;
+    }
+
+    public void setSpecialRequirement(boolean specialRequirement) {
+        SpecialRequirement = specialRequirement;
+    }
+
     @Override
     public String toString() {
         return "Accounts{" +
@@ -52,6 +61,7 @@ public class Accounts extends Users{
                 ", HouseNumber=" + HouseNumber +
                 ", Street='" + Street + '\'' +
                 ", Username='" + Username + '\'' +
+                ", Special Requirement='" + SpecialRequirement + '\'' +
                 '}';
     }
 }

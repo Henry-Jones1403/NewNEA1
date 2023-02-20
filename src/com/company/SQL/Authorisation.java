@@ -4,7 +4,8 @@ import java.sql.*;
 import java.util.Scanner;
 
 public class Authorisation {
-    public static boolean AuthoriseAdmin() {
+    public static boolean[] AuthoriseAdmin() {
+        boolean[] adminReq = {false, false};
         try {
             boolean BrutePrevent = false;
             while (!BrutePrevent) {
@@ -22,8 +23,12 @@ public class Authorisation {
                     while (Rs.next()) {
                         ResultSetMetaData rsmd = Rs.getMetaData();
                         if ((Rs.getInt(4)) > 1) {
+                            System.out.print("Admin: ");
+adminReq[0] = yesNo(input.next());
+                            System.out.print("Special Requirements: ");
+                            adminReq[1] = yesNo(input.next());
                             System.out.println("AUTHORISATION COMPLETE\n----------------");
-                            return true;
+                            return adminReq;
                         }
 
                     }
@@ -38,6 +43,12 @@ public class Authorisation {
             System.out.println("Please Try again");
         }
 
-        return false;
+        return adminReq;
+    }private static boolean yesNo(String answer){
+        if(answer.equalsIgnoreCase("yes")){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

@@ -23,7 +23,7 @@ public class Additions {
         }
     }
 
-    public static void  addAccount(boolean admin, String FirstName_, String LastName_, String PhoneNumber, Membership member, boolean imbedded) {
+    public static void  addAccount(boolean admin, String FirstName_, String LastName_, String PhoneNumber, Membership member, boolean imbedded, boolean SpecialRequirements) {
         String DatabaseLocation = System.getProperty("user.dir") + "\\ProjectDatabase.accdb";
         ArrayList<Users> repeated_names = new ArrayList<>();
         Integer UserID = 0;
@@ -42,7 +42,7 @@ public class Additions {
                 Statement stmt = con.createStatement();
                 String password = PasswordManagement.PasswordHasher("password");
                 stmt.execute("INSERT INTO Accounts(Username, Password, Admin, UserID, MembershipID) VALUES('" + username + "', '"
-                        + password + "', '" + admin + "', '" + UserID + "', '" + member.getMembershipID() + "')");
+                        + password + "', '" + admin + "', '" + UserID + "', '" + member.getMembershipID() + "', '" + SpecialRequirements + "')");
                 con.close();
             }
 

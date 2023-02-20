@@ -13,8 +13,8 @@ public class Register {
         try{
             String Email = "";
             Scanner input = new Scanner(System.in);
-            boolean admin = false;
-            System.out.println("Are you adding an admin?");
+            boolean[] admin = new boolean[2];
+            System.out.println("Are you adding an admin or an account with special requirements?");
             if (input.next().toUpperCase(Locale.ROOT).equalsIgnoreCase("YES")){
                     admin = Authorisation.AuthoriseAdmin();
             }
@@ -36,7 +36,8 @@ public class Register {
             Additions.add("INSERT INTO Users(FirstName, LastName, Email, Phone, Postcode, HouseNumber, Street) VALUES('" + registerValues.get("FirstName")
                     + "', '" + registerValues.get("LastName") + "', '" + registerValues.get("Email") + "', '" + registerValues.get("Phone") + "', '"
                     + registerValues.get("Postcode") + "', '" + registerValues.get("HouseNumber") + "', '" + registerValues.get("Street") + "')");
-            Additions.addAccount(admin, registerValues.get("FirstName"), registerValues.get("LastName"), registerValues.get("Phone"), MemberDet, true);
+            Additions.addAccount(admin[0], registerValues.get("FirstName"), registerValues.get("LastName"), registerValues.get("Phone"),
+                    MemberDet, true, admin[1]);
             System.out.println("Successfully added new member.\n");
         }catch(Exception e){
             System.out.println("Please retry!");

@@ -81,7 +81,7 @@ public class BookSlot {
             currentBookings = BookingSQL.Bookings("SELECT * FROM " + facility + " WHERE (BookingDate = '" + Selected + "') AND (EntryTime = '"
                 + SelectedTime.toString() + "')");
             if(currentBookings.size()<5){
-                BookingSQL.Book(Selected, SelectedTime, SelectedTime.plusHours(1), BookingAccount.getAccountID(), facility);
+                BookingSQL.Book(Selected, SelectedTime, SelectedTime.plusHours(1), BookingAccount.getAccountID(), facility, BookingAccount.isSpecialRequirement());
                 Completed = true;
                 System.out.println("Your booking is complete. In your session there will be " + currentBookings.size() + " other people with you.");
             }else{
