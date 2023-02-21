@@ -10,16 +10,20 @@ import java.util.ArrayList;
 
 public class SQLSearches {
 
-    public static boolean LoginSQL(String Username, String Password) {
+    public static boolean LoginSQL(String Username, String Password) {          //confirms the username and password are correct and the permissions are correct
+        //gets the directory for this project and appends the name of the database file to it and sets it as the database location.
         String DatabaseLocation = System.getProperty("user.dir") + "\\ProjectDatabase.accdb";
         try {
+            //sets the connection to the database using the database location
             Connection con = DriverManager.getConnection("jdbc:ucanaccess://" + DatabaseLocation, "", "");
-
+            //forms a statement which is used to format the results
             Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             String sql = "SELECT * FROM Accounts";
+            //Executes the SQL and returns the results as a ResultSet
             ResultSet RS = stmt.executeQuery(sql);
             boolean username = false;
             boolean password = false;
+            //Loops through all the records
             while (RS.next()) {
                 if (Username.equals(RS.getString("Username"))) {
                     username = true;
@@ -47,13 +51,17 @@ public class SQLSearches {
 
     }
 
-    public static ArrayList<Users> Search(String sql) {
+    public static ArrayList<Users> Search(String sql) {                     //creates a list of User objects with all of the data from the tables
         boolean register = true;
         ArrayList<Users> output = new ArrayList<>();
+        //gets the directory for this project and appends the name of the database file to it and sets it as the database location.
         String DatabaseLocation = System.getProperty("user.dir") + "\\ProjectDatabase.accdb";
         try {
+            //sets the connection to the database using the database location
             Connection con = DriverManager.getConnection("jdbc:ucanaccess://" + DatabaseLocation, "", "");
+            //forms a statement which is used to format the results
             Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            //Executes the SQL and returns the results as a ResultSet
             ResultSet Rs = stmt.executeQuery(sql);
             ResultSetMetaData rsmd = Rs.getMetaData();
             int columnsNumber = rsmd.getColumnCount();

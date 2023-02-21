@@ -4,20 +4,21 @@ import com.company.SQL.SQLSearches;
 
 import java.util.ArrayList;
 
-public class SearchEmails {
+public class SearchEmails {     //prints all emails in alphabetical order
     public static void Emailsort() {
-        ArrayList<Users> AllUsers = SQLSearches.Search("SELECT* FROM Users");
-        String[] Emails = new String[AllUsers.size()];
+        ArrayList<Users> AllUsers = SQLSearches.Search("SELECT* FROM Users");       //Gets all rows from the users table
+        String[] Emails = new String[AllUsers.size()];      //initialises list which will store all emails
         for (int i = 0; i < AllUsers.size(); i++) {
-            Emails[i] = AllUsers.get(i).getEmail();
+            Emails[i] = AllUsers.get(i).getEmail();         //Enters all emails into the list
         }
-        Sort(Emails);
-        for (int i = 0; i < Emails.length; i++) {
-            System.out.println(Emails[i]);
+        Sort(Emails);       //sorts the emails
+        System.out.println("----------------\nAll Emails:");
+        for (String email : Emails) {
+            System.out.println(email);
         }
     }
 
-    private static void Sort(String[] Emails) {
+    private static void Sort(String[] Emails) {         //help using https://www.codepile.net/pile/n627owzd to explain fundamentals
         if (Emails.length < 2) {
             return;
         }
@@ -36,7 +37,6 @@ public class SearchEmails {
     }
 
     private static void merge(String[] Emails, String[] left, String[] right) {
-        System.out.println("----------------\nAll Emails:");
         int i = 0;
         int j = 0;
         int k = 0;
